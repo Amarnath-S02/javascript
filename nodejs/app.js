@@ -1,60 +1,59 @@
-const express = require('express');
-const app = express();
+const express=require('express');
+const app=express();
 
-app.use(express.json()); // Middleware should be set up here.
+app.use(express.json());
 
-const courses = [
-    {id: 1, name: "javascript"},
-    {id: 2, name: "python"},
-];
+const courses=[
+    {id:1,name:"java"},
+    {id:2,name:"javascript"},
+    {id:3,name:"python"},
+    {id:4,name:"c"},
+    {id:5,name:"c++"},
+]
 
-app.get('/', (req, res) => {
-    res.send("hello");
-});
+app.get('/courses',(req,res)=>{
+    res.send(courses)
+})
 
-// Route parameters
-app.get('/about/:id', (req, res) => {
-    res.send(req.params.id);
-});
+// app.post('/courses',(req,res)=>{
 
-// Handling parameters
-app.get('/courses/:coursename', (req, res) => {
-    const course = courses.find(course => course.name === req.params.coursename);
+// const course= {
+// id:courses.length+1,
+// name:req.body.name
+// };
 
-    if (!course) {
-        res.status(404).send('your course is not available');
-        return;
-    }
-    
-    res.send(course);
-});
+// courses.push(course);
+// res.send(courses);
+// });
 
-// Post method
-app.post('/courses', (req, res) => {
-    const course = {
-        id: courses.length + 1,
-        name: req.body.name
-    };
+// app.get('/courses/:coursename',(req,res)=>{
+//     const course=courses.find(course=> course.name === req.params.coursename);
+//     if(!course){
+//        return res.status(400).send("course not available")
+//     }
 
-    courses.push(course);
-    res.send(courses);
-});
+//     res.send(course)
+// })
 
-// Put method
-app.put('/course/:coursename', (req, res) => {
-   let course = courses.find(course => course.name === req.params.coursename);
 
-    if (!course) {
-        res.status(404).send("course not found");
-        return;
-    }
+// app.put('/courses/:coursename',(req,res)=>{
+//     const course=courses.find(course=> course.name === req.params.coursename);
 
-    course.name = req.body.name;
-    res.send(course);
-});
+//     course.name=req.body.name
+//     res.send(course)
+// });
 
-const port = process.env.PORT || 3000;
+app.delete('/courses/:coursename',(req,res)=> {
+    const course=courses.filter(course=> course.name !== req.params.coursename)
 
-app.listen(port, () => {
-    console.log(`app is running on port ${port}`);
-});
+    courses.push(course)
+    res.send(courses)
+})
+
+
+
+const port=process.env.port || 3000
+
+app.listen(port,()=>{
+    console.log(`port is running on ${port}`)
+})
